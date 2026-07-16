@@ -1,0 +1,1533 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>建設コンサル営業 Hub</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f7f8;
+      --panel: #ffffff;
+      --ink: #172026;
+      --muted: #65727d;
+      --line: #dce3e8;
+      --teal: #087f8c;
+      --teal-soft: #dff4f6;
+      --green: #2e7d54;
+      --green-soft: #e6f3ec;
+      --amber: #b46b09;
+      --amber-soft: #fff1d6;
+      --red: #b33a3a;
+      --red-soft: #fde8e8;
+      --blue: #2f63a3;
+      --blue-soft: #e8f0fb;
+      --violet: #6d5aa7;
+      --violet-soft: #eeeafb;
+      --shadow: 0 16px 48px rgba(39, 54, 66, 0.12);
+      --radius: 8px;
+      --sidebar: 248px;
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px 16px;
+      background: #10242a;
+      color: #f6fbfc;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 44px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: #12a4a6;
+      color: white;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: #a9c0c7;
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav button {
+      height: 42px;
+      color: #c8d7dc;
+      background: transparent;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      text-align: left;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius);
+      color: #d7e8eb;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      min-height: 72px;
+      padding: 14px 24px;
+      background: rgba(245,247,248,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .search {
+      height: 44px;
+      max-width: 640px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .icon-btn,
+    .primary-btn,
+    .secondary-btn {
+      height: 40px;
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .icon-btn {
+      width: 40px;
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .primary-btn {
+      padding: 0 14px;
+      background: var(--teal);
+      color: white;
+      font-weight: 700;
+    }
+
+    .secondary-btn {
+      padding: 0 12px;
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .content {
+      padding: 24px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .section {
+      display: none;
+      gap: 18px;
+    }
+
+    .section.active {
+      display: grid;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.25;
+    }
+
+    .section-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .kpi,
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    .kpi {
+      min-height: 122px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .kpi-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .kpi strong {
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1;
+    }
+
+    .kpi small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .card {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .card-header {
+      min-height: 58px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .card-header span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .deadline-list,
+    .risk-list,
+    .activity-list {
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .deadline,
+    .risk,
+    .activity {
+      min-height: 64px;
+      padding: 11px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: #fff;
+    }
+
+    .date-chip {
+      width: 54px;
+      height: 44px;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .deadline h4,
+    .risk h4,
+    .activity h4 {
+      margin: 0 0 3px;
+      font-size: 13px;
+    }
+
+    .deadline p,
+    .risk p,
+    .activity p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .badge {
+      min-width: 64px;
+      height: 28px;
+      padding: 0 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.green { background: var(--green-soft); color: var(--green); }
+    .badge.amber { background: var(--amber-soft); color: var(--amber); }
+    .badge.red { background: var(--red-soft); color: var(--red); }
+    .badge.blue { background: var(--blue-soft); color: var(--blue); }
+    .badge.violet { background: var(--violet-soft); color: var(--violet); }
+    .badge.gray { background: #eef2f4; color: #55616a; }
+
+    .calendar-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .calendar {
+      padding: 12px;
+    }
+
+    .calendar-head {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .day {
+      min-height: 96px;
+      padding: 8px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: white;
+      display: grid;
+      align-content: start;
+      gap: 5px;
+    }
+
+    .day.dim {
+      background: #f8fafb;
+      color: #a1aab1;
+    }
+
+    .day.today {
+      outline: 2px solid var(--teal);
+      outline-offset: -2px;
+    }
+
+    .day-number {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .event-dot {
+      min-height: 20px;
+      padding: 3px 5px;
+      border-radius: 5px;
+      font-size: 11px;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #123035;
+      background: var(--teal-soft);
+    }
+
+    .event-dot.contract { background: var(--blue-soft); }
+    .event-dot.end { background: var(--red-soft); }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filters select,
+    .filters input,
+    .form-grid input,
+    .form-grid select {
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      color: var(--ink);
+      padding: 0 10px;
+      outline: 0;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f9fbfc;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    td strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .progress {
+      width: 126px;
+      height: 10px;
+      border-radius: 999px;
+      background: #e8eef1;
+      overflow: hidden;
+    }
+
+    .progress i {
+      display: block;
+      height: 100%;
+      width: var(--value);
+      background: var(--teal);
+      border-radius: inherit;
+    }
+
+    .workload {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .person {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .person-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .person h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+    }
+
+    .person p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .meter {
+      height: 12px;
+      border-radius: 999px;
+      background: #e8eef1;
+      overflow: hidden;
+    }
+
+    .meter i {
+      display: block;
+      height: 100%;
+      width: var(--load);
+      border-radius: inherit;
+      background: var(--green);
+    }
+
+    .meter.warn i { background: var(--amber); }
+    .meter.danger i { background: var(--red); }
+
+    .project-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mini-tag {
+      padding: 5px 7px;
+      border-radius: 999px;
+      background: #eef2f4;
+      color: #52606b;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .analytics {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 16px;
+    }
+
+    .bars {
+      padding: 18px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr) 116px;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .bar-track {
+      height: 16px;
+      border-radius: 999px;
+      background: #e8eef1;
+      overflow: hidden;
+    }
+
+    .bar-track i {
+      display: block;
+      height: 100%;
+      width: var(--bar);
+      background: var(--blue);
+      border-radius: inherit;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(210px, 1fr));
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .column {
+      min-height: 420px;
+      background: #edf2f4;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .column-head {
+      min-height: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      color: #314048;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .deal {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .deal h4 {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .deal p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .deal-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .deal-actions select {
+      width: 100%;
+      min-width: 0;
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      font-size: 12px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(10, 24, 30, 0.52);
+    }
+
+    .modal.active {
+      display: grid;
+    }
+
+    .modal-panel {
+      width: min(860px, 100%);
+      max-height: min(760px, 92vh);
+      overflow: auto;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+    }
+
+    .modal-head {
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 2;
+      min-height: 62px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .form-grid {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .modal-foot {
+      padding: 16px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 80;
+      min-width: 240px;
+      max-width: 360px;
+      padding: 12px 14px;
+      background: #10242a;
+      color: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: none;
+      font-size: 13px;
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    @media (max-width: 1120px) {
+      .app {
+        grid-template-columns: 76px minmax(0, 1fr);
+      }
+
+      .brand div:last-child,
+      .nav span,
+      .sidebar-foot {
+        display: none;
+      }
+
+      .sidebar {
+        align-items: center;
+        padding: 18px 10px;
+      }
+
+      .nav button {
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+      }
+
+      .kpis,
+      .workload {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-2,
+      .calendar-wrap,
+      .analytics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 12px;
+        flex-direction: row;
+        overflow-x: auto;
+      }
+
+      .brand {
+        min-width: 46px;
+      }
+
+      .nav {
+        display: flex;
+      }
+
+      .topbar {
+        position: static;
+        grid-template-columns: 1fr;
+        padding: 14px;
+      }
+
+      .content {
+        padding: 14px;
+      }
+
+      .kpis,
+      .workload {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .calendar-grid,
+      .calendar-head {
+        min-width: 720px;
+      }
+
+      .calendar {
+        overflow-x: auto;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand" aria-label="建設コンサル営業 Hub">
+        <div class="brand-mark">CC</div>
+        <div>
+          <h1>建設コンサル<br>営業 Hub</h1>
+          <p>案件・期限・稼働を一画面で</p>
+        </div>
+      </div>
+      <nav class="nav" aria-label="主要メニュー">
+        <button class="active" data-section="dashboard" title="ダッシュボード"><i data-lucide="layout-dashboard"></i><span>ダッシュボード</span></button>
+        <button data-section="calendar" title="カレンダー"><i data-lucide="calendar-days"></i><span>カレンダー</span></button>
+        <button data-section="projects" title="案件管理"><i data-lucide="clipboard-list"></i><span>案件管理</span></button>
+        <button data-section="workload" title="技術者稼働"><i data-lucide="users-round"></i><span>技術者稼働</span></button>
+        <button data-section="analytics" title="受注分析"><i data-lucide="chart-column-big"></i><span>受注分析</span></button>
+        <button data-section="pipeline" title="パイプライン"><i data-lucide="kanban-square"></i><span>パイプライン</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        便利機能: 期限アラート、CSV出力、負荷警告、今月タスク、案件検索、簡易案件登録を搭載。
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <label class="search">
+          <i data-lucide="search"></i>
+          <input id="globalSearch" type="search" placeholder="案件名・発注者・担当者で検索">
+        </label>
+        <div class="actions">
+          <button class="secondary-btn" id="exportCsv"><i data-lucide="download"></i>CSV</button>
+          <button class="primary-btn" id="openModal"><i data-lucide="plus"></i>案件追加</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="section active" id="dashboard">
+          <div class="section-title">
+            <div>
+              <h2>営業ダッシュボード</h2>
+              <p>期限、進行状況、受注状況、技術者負荷をまとめて確認できます。</p>
+            </div>
+            <span class="badge blue" id="todayLabel"></span>
+          </div>
+
+          <div class="kpis">
+            <article class="kpi">
+              <div class="kpi-head"><span>案件本数</span><i data-lucide="folder-kanban"></i></div>
+              <strong id="kpiCount">0</strong>
+              <small id="kpiActive">進行中 0件</small>
+            </article>
+            <article class="kpi">
+              <div class="kpi-head"><span>受注総額 税抜</span><i data-lucide="circle-dollar-sign"></i></div>
+              <strong id="kpiAmount">0</strong>
+              <small id="kpiMonthAmount">今月受注 0円</small>
+            </article>
+            <article class="kpi">
+              <div class="kpi-head"><span>期限超過</span><i data-lucide="triangle-alert"></i></div>
+              <strong id="kpiOverdue">0</strong>
+              <small>工期終了日または入札期限を超過</small>
+            </article>
+            <article class="kpi">
+              <div class="kpi-head"><span>今月期限</span><i data-lucide="alarm-clock"></i></div>
+              <strong id="kpiThisMonth">0</strong>
+              <small>入札・契約・工期終了の合計</small>
+            </article>
+          </div>
+
+          <div class="grid-2">
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3>今月の期限業務</h3>
+                  <span>入札、契約、工期終了を日付順に表示</span>
+                </div>
+                <button class="icon-btn" data-jump="calendar" title="カレンダーへ"><i data-lucide="arrow-right"></i></button>
+              </div>
+              <div class="deadline-list" id="deadlineList"></div>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3>要注意アラート</h3>
+                  <span>営業が先回りして確認したい項目</span>
+                </div>
+              </div>
+              <div class="risk-list" id="riskList"></div>
+            </article>
+          </div>
+
+          <div class="grid-2">
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3>直近の案件進捗</h3>
+                  <span>残日数が短い案件を優先表示</span>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>案件</th><th>発注者</th><th>残日数</th><th>進捗</th><th>主任</th><th>状況</th></tr>
+                  </thead>
+                  <tbody id="dashboardRows"></tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3>営業メモ</h3>
+                  <span>追加すると便利な運用チェック</span>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity"><i data-lucide="file-check-2"></i><div><h4>提出書類チェック</h4><p>公告・仕様書・入札参加資格・見積内訳の確認欄を案件ごとに持てます。</p></div><span class="badge green">推奨</span></div>
+                <div class="activity"><i data-lucide="bell-ring"></i><div><h4>リマインド</h4><p>入札3日前、契約7日前、工期30日前の自動通知に発展できます。</p></div><span class="badge blue">便利</span></div>
+                <div class="activity"><i data-lucide="book-open-check"></i><div><h4>提案ナレッジ</h4><p>類似案件、勝因、失注理由、競合情報を蓄積すると次回提案に効きます。</p></div><span class="badge violet">分析</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="calendar">
+          <div class="section-title">
+            <div>
+              <h2>期限カレンダー</h2>
+              <p>当月の期限業務を右側に固定表示し、入札・契約・工期終了を色分けします。</p>
+            </div>
+          </div>
+          <div class="calendar-wrap">
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3 id="monthTitle"></h3>
+                  <span>入札: 緑 / 契約: 青 / 工期終了: 赤</span>
+                </div>
+              </div>
+              <div class="calendar">
+                <div class="calendar-head"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3>当月の期限業務</h3>
+                  <span>営業朝会でそのまま確認</span>
+                </div>
+              </div>
+              <div class="deadline-list" id="calendarDeadlineList"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="projects">
+          <div class="section-title">
+            <div>
+              <h2>案件管理</h2>
+              <p>案件ナンバー、発注者、金額、工期、担当、技術者、進捗率を一覧管理します。</p>
+            </div>
+            <div class="filters">
+              <select id="statusFilter" aria-label="状況で絞り込み">
+                <option value="all">すべて</option>
+                <option value="進行中">進行中</option>
+                <option value="契約準備">契約準備</option>
+                <option value="完了">完了</option>
+                <option value="期限超過">期限超過</option>
+              </select>
+              <select id="sortSelect" aria-label="並び替え">
+                <option value="endAsc">工期終了が近い順</option>
+                <option value="amountDesc">金額が大きい順</option>
+                <option value="progressAsc">進捗が低い順</option>
+              </select>
+            </div>
+          </div>
+          <article class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>案件No.</th><th>発注者 / 案件名</th><th>落札金額 税抜</th><th>工期</th><th>残日数</th><th>社内担当</th><th>主任技術者</th><th>照査技術者</th><th>進捗</th><th>ステータス</th>
+                  </tr>
+                </thead>
+                <tbody id="projectRows"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section class="section" id="workload">
+          <div class="section-title">
+            <div>
+              <h2>技術者の稼働状況</h2>
+              <p>主任・照査技術者の担当案件数、負荷、期限リスクを確認します。</p>
+            </div>
+          </div>
+          <div class="workload" id="workloadGrid"></div>
+        </section>
+
+        <section class="section" id="analytics">
+          <div class="section-title">
+            <div>
+              <h2>受注分析</h2>
+              <p>月ごとの受注本数と受注額、発注者別の偏りを確認します。</p>
+            </div>
+          </div>
+          <div class="analytics">
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3>月別 受注本数・受注額</h3>
+                  <span>今年度の営業ペースを把握</span>
+                </div>
+              </div>
+              <div class="bars" id="monthlyBars"></div>
+            </article>
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <h3>発注者別 受注額</h3>
+                  <span>重点顧客の把握に使用</span>
+                </div>
+              </div>
+              <div class="bars" id="clientBars"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="pipeline">
+          <div class="section-title">
+            <div>
+              <h2>営業パイプライン</h2>
+              <p>リードから受注・失注まで、提案状況を列ごとに確認します。</p>
+            </div>
+          </div>
+          <div class="pipeline" id="pipelineBoard"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="projectModal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <h3 id="modalTitle">案件を追加</h3>
+        <button class="icon-btn" id="closeModal" title="閉じる"><i data-lucide="x"></i></button>
+      </div>
+      <form id="projectForm">
+        <div class="form-grid">
+          <div class="field"><label>案件No.</label><input required name="id" value="CC-2026-009"></div>
+          <div class="field"><label>発注者</label><input required name="client" value="県土整備事務所"></div>
+          <div class="field"><label>案件名</label><input required name="name" value="道路防災点検業務"></div>
+          <div class="field"><label>落札金額 税抜</label><input required name="amount" type="number" value="18500000"></div>
+          <div class="field"><label>入札日</label><input required name="bidDate" type="date" value="2026-07-24"></div>
+          <div class="field"><label>契約日</label><input required name="contractDate" type="date" value="2026-08-03"></div>
+          <div class="field"><label>工期開始日</label><input required name="startDate" type="date" value="2026-08-05"></div>
+          <div class="field"><label>工期終了日</label><input required name="endDate" type="date" value="2027-01-30"></div>
+          <div class="field"><label>社内担当</label><input required name="salesOwner" value="佐藤"></div>
+          <div class="field"><label>主任技術者</label><input required name="leadEngineer" value="田中"></div>
+          <div class="field"><label>照査技術者</label><input required name="reviewEngineer" value="井上"></div>
+          <div class="field"><label>進捗率</label><input required name="progress" type="number" min="0" max="100" value="0"></div>
+          <div class="field"><label>ステータス</label><select name="status"><option>契約準備</option><option>進行中</option><option>完了</option></select></div>
+          <div class="field"><label>パイプライン</label><select name="pipeline"><option>リード</option><option>提案準備</option><option>提案済み</option><option>交渉中</option><option>受注</option><option>失注</option></select></div>
+          <div class="field"><label>受注月</label><input required name="orderMonth" type="month" value="2026-07"></div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="secondary-btn" id="cancelModal">キャンセル</button>
+          <button type="submit" class="primary-btn"><i data-lucide="save"></i>保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const today = new Date("2026-07-16T09:00:00+09:00");
+    const stages = ["リード", "提案準備", "提案済み", "交渉中", "受注", "失注"];
+    const seedProjects = [
+      { id: "CC-2026-001", client: "国土交通省 関東地方整備局", name: "一級河川堤防詳細設計業務", amount: 42600000, bidDate: "2026-07-08", contractDate: "2026-07-18", startDate: "2026-07-22", endDate: "2027-02-27", salesOwner: "佐藤", leadEngineer: "田中", reviewEngineer: "井上", progress: 12, status: "契約準備", pipeline: "受注", orderMonth: "2026-07" },
+      { id: "CC-2026-002", client: "横浜市 道路局", name: "橋梁長寿命化修繕計画策定", amount: 31800000, bidDate: "2026-06-18", contractDate: "2026-07-02", startDate: "2026-07-06", endDate: "2026-12-18", salesOwner: "山本", leadEngineer: "鈴木", reviewEngineer: "田中", progress: 28, status: "進行中", pipeline: "受注", orderMonth: "2026-06" },
+      { id: "CC-2026-003", client: "千葉県 県土整備部", name: "都市計画道路予備設計業務", amount: 24400000, bidDate: "2026-07-23", contractDate: "2026-08-04", startDate: "2026-08-06", endDate: "2027-03-10", salesOwner: "佐藤", leadEngineer: "高橋", reviewEngineer: "井上", progress: 0, status: "契約準備", pipeline: "交渉中", orderMonth: "2026-07" },
+      { id: "CC-2026-004", client: "さいたま市 建設局", name: "下水道管路耐震診断業務", amount: 19600000, bidDate: "2026-05-28", contractDate: "2026-06-10", startDate: "2026-06-15", endDate: "2026-10-30", salesOwner: "森", leadEngineer: "井上", reviewEngineer: "鈴木", progress: 45, status: "進行中", pipeline: "受注", orderMonth: "2026-06" },
+      { id: "CC-2026-005", client: "東京都 建設局", name: "交差点改良概略設計業務", amount: 51200000, bidDate: "2026-07-29", contractDate: "2026-08-12", startDate: "2026-08-17", endDate: "2027-04-24", salesOwner: "山本", leadEngineer: "田中", reviewEngineer: "高橋", progress: 0, status: "契約準備", pipeline: "提案済み", orderMonth: "2026-08" },
+      { id: "CC-2026-006", client: "神奈川県 企業庁", name: "浄水場更新基本計画", amount: 37400000, bidDate: "2026-04-24", contractDate: "2026-05-14", startDate: "2026-05-20", endDate: "2026-09-05", salesOwner: "森", leadEngineer: "鈴木", reviewEngineer: "高橋", progress: 68, status: "進行中", pipeline: "受注", orderMonth: "2026-05" },
+      { id: "CC-2026-007", client: "川崎市 まちづくり局", name: "駅前広場再整備検討業務", amount: 12800000, bidDate: "2026-07-11", contractDate: "2026-07-25", startDate: "2026-08-01", endDate: "2026-11-28", salesOwner: "佐藤", leadEngineer: "高橋", reviewEngineer: "井上", progress: 8, status: "契約準備", pipeline: "提案準備", orderMonth: "2026-07" },
+      { id: "CC-2026-008", client: "茨城県 土木部", name: "砂防施設点検台帳整備", amount: 9200000, bidDate: "2026-03-12", contractDate: "2026-03-28", startDate: "2026-04-01", endDate: "2026-07-10", salesOwner: "山本", leadEngineer: "井上", reviewEngineer: "田中", progress: 92, status: "期限超過", pipeline: "受注", orderMonth: "2026-03" },
+      { id: "L-2026-014", client: "栃木県 道路保全課", name: "道路附属物点検業務", amount: 15400000, bidDate: "2026-08-18", contractDate: "2026-09-02", startDate: "2026-09-08", endDate: "2027-01-22", salesOwner: "森", leadEngineer: "鈴木", reviewEngineer: "井上", progress: 0, status: "見込み", pipeline: "リード", orderMonth: "2026-09" },
+      { id: "L-2026-018", client: "群馬県 都市計画課", name: "公園施設更新計画", amount: 8100000, bidDate: "2026-08-04", contractDate: "2026-08-21", startDate: "2026-08-24", endDate: "2026-12-25", salesOwner: "佐藤", leadEngineer: "高橋", reviewEngineer: "田中", progress: 0, status: "見込み", pipeline: "失注", orderMonth: "2026-08" }
+    ];
+
+    const formatter = new Intl.NumberFormat("ja-JP");
+    const yen = value => `${formatter.format(value)}円`;
+    const shortYen = value => `${formatter.format(Math.round(value / 10000))}万円`;
+    const ymd = value => new Date(`${value}T00:00:00+09:00`);
+    const diffDays = value => Math.ceil((ymd(value) - today) / 86400000);
+    const pad = number => String(number).padStart(2, "0");
+    const monthKey = date => `${date.getFullYear()}-${pad(date.getMonth() + 1)}`;
+    const currentMonth = monthKey(today);
+    let projects = JSON.parse(localStorage.getItem("cc-sales-projects") || "null") || seedProjects;
+    let searchTerm = "";
+
+    const els = {
+      sections: document.querySelectorAll(".section"),
+      nav: document.querySelectorAll(".nav button"),
+      deadlineList: document.getElementById("deadlineList"),
+      calendarDeadlineList: document.getElementById("calendarDeadlineList"),
+      calendarGrid: document.getElementById("calendarGrid"),
+      monthTitle: document.getElementById("monthTitle"),
+      projectRows: document.getElementById("projectRows"),
+      dashboardRows: document.getElementById("dashboardRows"),
+      workloadGrid: document.getElementById("workloadGrid"),
+      monthlyBars: document.getElementById("monthlyBars"),
+      clientBars: document.getElementById("clientBars"),
+      pipelineBoard: document.getElementById("pipelineBoard"),
+      riskList: document.getElementById("riskList"),
+      toast: document.getElementById("toast"),
+      modal: document.getElementById("projectModal")
+    };
+
+    function filteredProjects() {
+      const status = document.getElementById("statusFilter")?.value || "all";
+      const sort = document.getElementById("sortSelect")?.value || "endAsc";
+      const term = searchTerm.trim().toLowerCase();
+      return projects
+        .filter(project => status === "all" || project.status === status)
+        .filter(project => !term || [project.id, project.client, project.name, project.salesOwner, project.leadEngineer, project.reviewEngineer].join(" ").toLowerCase().includes(term))
+        .sort((a, b) => {
+          if (sort === "amountDesc") return b.amount - a.amount;
+          if (sort === "progressAsc") return a.progress - b.progress;
+          return ymd(a.endDate) - ymd(b.endDate);
+        });
+    }
+
+    function statusBadge(project) {
+      const days = diffDays(project.endDate);
+      if (project.status === "期限超過" || days < 0) return ["期限超過", "red"];
+      if (project.status === "完了") return ["完了", "gray"];
+      if (project.status === "契約準備") return ["契約準備", "blue"];
+      if (days <= 30) return ["期限注意", "amber"];
+      if (project.status === "見込み") return ["見込み", "violet"];
+      return ["進行中", "green"];
+    }
+
+    function deadlineEvents() {
+      const labels = [
+        ["bidDate", "入札", ""],
+        ["contractDate", "契約", "contract"],
+        ["endDate", "工期終了", "end"]
+      ];
+      return projects.flatMap(project => labels.map(([key, label, className]) => ({
+        project,
+        date: project[key],
+        label,
+        className
+      }))).sort((a, b) => ymd(a.date) - ymd(b.date));
+    }
+
+    function thisMonthEvents() {
+      return deadlineEvents().filter(event => event.date.startsWith(currentMonth));
+    }
+
+    function renderKpis() {
+      const active = projects.filter(project => ["進行中", "契約準備"].includes(project.status)).length;
+      const ordered = projects.filter(project => project.pipeline === "受注");
+      const total = ordered.reduce((sum, project) => sum + project.amount, 0);
+      const monthAmount = ordered.filter(project => project.orderMonth === currentMonth).reduce((sum, project) => sum + project.amount, 0);
+      const overdue = projects.filter(project => statusBadge(project)[0] === "期限超過").length;
+      document.getElementById("todayLabel").textContent = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日 現在`;
+      document.getElementById("kpiCount").textContent = formatter.format(projects.length);
+      document.getElementById("kpiActive").textContent = `進行中 ${active}件`;
+      document.getElementById("kpiAmount").textContent = shortYen(total);
+      document.getElementById("kpiMonthAmount").textContent = `今月受注 ${shortYen(monthAmount)}`;
+      document.getElementById("kpiOverdue").textContent = formatter.format(overdue);
+      document.getElementById("kpiThisMonth").textContent = formatter.format(thisMonthEvents().length);
+    }
+
+    function renderDeadlineList(target, events) {
+      target.innerHTML = events.length ? events.map(event => {
+        const date = ymd(event.date);
+        const days = diffDays(event.date);
+        const urgency = days < 0 ? "red" : days <= 7 ? "amber" : event.label === "工期終了" ? "red" : event.label === "契約" ? "blue" : "green";
+        const dayText = days < 0 ? `${Math.abs(days)}日超過` : `あと${days}日`;
+        return `
+          <div class="deadline">
+            <div class="date-chip">${date.getMonth() + 1}/${date.getDate()}</div>
+            <div>
+              <h4>${event.label}: ${event.project.name}</h4>
+              <p>${event.project.client} / 担当 ${event.project.salesOwner}</p>
+            </div>
+            <span class="badge ${urgency}">${dayText}</span>
+          </div>
+        `;
+      }).join("") : `<div class="activity"><i data-lucide="check-circle-2"></i><div><h4>期限業務なし</h4><p>この条件では表示対象がありません。</p></div><span class="badge green">OK</span></div>`;
+    }
+
+    function renderCalendar() {
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      els.monthTitle.textContent = `${year}年${month + 1}月`;
+      const first = new Date(year, month, 1);
+      const start = new Date(year, month, 1 - first.getDay());
+      const events = deadlineEvents();
+      const cells = Array.from({ length: 42 }, (_, index) => {
+        const d = new Date(start);
+        d.setDate(start.getDate() + index);
+        const key = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const dayEvents = events.filter(event => event.date === key).slice(0, 3);
+        const classes = ["day"];
+        if (d.getMonth() !== month) classes.push("dim");
+        if (key === `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`) classes.push("today");
+        return `
+          <div class="${classes.join(" ")}">
+            <span class="day-number">${d.getDate()}</span>
+            ${dayEvents.map(event => `<span class="event-dot ${event.className}">${event.label} ${event.project.name}</span>`).join("")}
+          </div>
+        `;
+      }).join("");
+      els.calendarGrid.innerHTML = cells;
+      renderDeadlineList(els.calendarDeadlineList, thisMonthEvents());
+    }
+
+    function renderTables() {
+      const rows = filteredProjects().map(project => {
+        const [label, color] = statusBadge(project);
+        const remaining = diffDays(project.endDate);
+        return `
+          <tr>
+            <td><strong>${project.id}</strong></td>
+            <td><strong>${project.name}</strong><span>${project.client}</span></td>
+            <td>${yen(project.amount)}</td>
+            <td>${project.startDate}<br>${project.endDate}</td>
+            <td>${remaining < 0 ? `${Math.abs(remaining)}日超過` : `あと${remaining}日`}</td>
+            <td>${project.salesOwner}</td>
+            <td>${project.leadEngineer}</td>
+            <td>${project.reviewEngineer}</td>
+            <td><div class="progress" title="${project.progress}%"><i style="--value:${project.progress}%"></i></div>${project.progress}%</td>
+            <td><span class="badge ${color}">${label}</span></td>
+          </tr>
+        `;
+      }).join("");
+      els.projectRows.innerHTML = rows;
+      els.dashboardRows.innerHTML = projects
+        .filter(project => project.pipeline === "受注")
+        .sort((a, b) => diffDays(a.endDate) - diffDays(b.endDate))
+        .slice(0, 6)
+        .map(project => {
+          const [label, color] = statusBadge(project);
+          const remaining = diffDays(project.endDate);
+          return `
+            <tr>
+              <td><strong>${project.name}</strong><span>${project.id}</span></td>
+              <td>${project.client}</td>
+              <td>${remaining < 0 ? `${Math.abs(remaining)}日超過` : `あと${remaining}日`}</td>
+              <td><div class="progress"><i style="--value:${project.progress}%"></i></div>${project.progress}%</td>
+              <td>${project.leadEngineer}</td>
+              <td><span class="badge ${color}">${label}</span></td>
+            </tr>
+          `;
+        }).join("");
+    }
+
+    function renderRisks() {
+      const risks = [];
+      projects.forEach(project => {
+        const days = diffDays(project.endDate);
+        if (days < 0) risks.push({ icon: "circle-alert", title: `${project.name} が工期超過`, text: `終了日 ${project.endDate} / 進捗 ${project.progress}%`, badge: "超過", color: "red" });
+        if (days >= 0 && days <= 30 && project.progress < 85) risks.push({ icon: "timer", title: `${project.name} は残り${days}日`, text: `主任 ${project.leadEngineer} / 進捗 ${project.progress}%`, badge: "注意", color: "amber" });
+        const bid = diffDays(project.bidDate);
+        if (bid >= 0 && bid <= 7 && project.pipeline !== "受注") risks.push({ icon: "file-warning", title: `${project.name} の入札が近い`, text: `入札日 ${project.bidDate} / ${project.pipeline}`, badge: "入札", color: "blue" });
+      });
+      els.riskList.innerHTML = risks.slice(0, 6).map(risk => `
+        <div class="risk">
+          <i data-lucide="${risk.icon}"></i>
+          <div><h4>${risk.title}</h4><p>${risk.text}</p></div>
+          <span class="badge ${risk.color}">${risk.badge}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderWorkload() {
+      const names = [...new Set(projects.flatMap(project => [project.leadEngineer, project.reviewEngineer]))].sort();
+      els.workloadGrid.innerHTML = names.map(name => {
+        const lead = projects.filter(project => project.leadEngineer === name && project.pipeline === "受注");
+        const review = projects.filter(project => project.reviewEngineer === name && project.pipeline === "受注");
+        const load = Math.min(120, lead.length * 24 + review.length * 14 + lead.filter(project => diffDays(project.endDate) <= 45).length * 10);
+        const cls = load >= 90 ? "danger" : load >= 70 ? "warn" : "";
+        const risky = lead.concat(review).filter(project => diffDays(project.endDate) <= 45).length;
+        return `
+          <article class="card person">
+            <div class="person-top">
+              <div>
+                <h3>${name}</h3>
+                <p>主任 ${lead.length}件 / 照査 ${review.length}件</p>
+              </div>
+              <span class="badge ${load >= 90 ? "red" : load >= 70 ? "amber" : "green"}">${load}%</span>
+            </div>
+            <div class="meter ${cls}"><i style="--load:${Math.min(load, 100)}%"></i></div>
+            <p>45日以内の期限: ${risky}件</p>
+            <div class="project-tags">
+              ${lead.concat(review).slice(0, 5).map(project => `<span class="mini-tag">${project.id}</span>`).join("")}
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderAnalytics() {
+      const ordered = projects.filter(project => project.pipeline === "受注");
+      const months = ["2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"];
+      const maxMonthAmount = Math.max(...months.map(m => ordered.filter(p => p.orderMonth === m).reduce((s, p) => s + p.amount, 0)), 1);
+      els.monthlyBars.innerHTML = months.map(m => {
+        const monthProjects = ordered.filter(p => p.orderMonth === m);
+        const amount = monthProjects.reduce((sum, project) => sum + project.amount, 0);
+        return `
+          <div class="bar-row">
+            <strong>${Number(m.slice(5))}月</strong>
+            <div class="bar-track"><i style="--bar:${Math.max(4, amount / maxMonthAmount * 100)}%"></i></div>
+            <span>${monthProjects.length}件 / ${shortYen(amount)}</span>
+          </div>
+        `;
+      }).join("");
+
+      const byClient = Object.entries(ordered.reduce((acc, project) => {
+        acc[project.client] = (acc[project.client] || 0) + project.amount;
+        return acc;
+      }, {})).sort((a, b) => b[1] - a[1]).slice(0, 7);
+      const maxClientAmount = Math.max(...byClient.map(([, amount]) => amount), 1);
+      els.clientBars.innerHTML = byClient.map(([client, amount]) => `
+        <div class="bar-row">
+          <strong title="${client}">${client.replace(/ .+$/, "")}</strong>
+          <div class="bar-track"><i style="--bar:${Math.max(4, amount / maxClientAmount * 100)}%"></i></div>
+          <span>${shortYen(amount)}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderPipeline() {
+      els.pipelineBoard.innerHTML = stages.map(stage => {
+        const list = projects.filter(project => project.pipeline === stage);
+        return `
+          <div class="column">
+            <div class="column-head"><span>${stage}</span><span class="badge gray">${list.length}件</span></div>
+            ${list.map(project => `
+              <article class="deal">
+                <div>
+                  <h4>${project.name}</h4>
+                  <p>${project.client}</p>
+                </div>
+                <div class="deal-actions">
+                  <span class="badge ${stage === "受注" ? "green" : stage === "失注" ? "red" : "blue"}">${shortYen(project.amount)}</span>
+                  <select data-pipeline-id="${project.id}" aria-label="${project.name}のステージ変更">
+                    ${stages.map(s => `<option ${s === stage ? "selected" : ""}>${s}</option>`).join("")}
+                  </select>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        `;
+      }).join("");
+      document.querySelectorAll("[data-pipeline-id]").forEach(select => {
+        select.addEventListener("change", event => {
+          const project = projects.find(p => p.id === event.target.dataset.pipelineId);
+          project.pipeline = event.target.value;
+          if (project.pipeline === "受注" && project.status === "見込み") project.status = "契約準備";
+          persist();
+          renderAll();
+          showToast(`${project.name} を「${project.pipeline}」へ移動しました`);
+        });
+      });
+    }
+
+    function persist() {
+      localStorage.setItem("cc-sales-projects", JSON.stringify(projects));
+    }
+
+    function renderAll() {
+      renderKpis();
+      renderDeadlineList(els.deadlineList, thisMonthEvents());
+      renderCalendar();
+      renderTables();
+      renderRisks();
+      renderWorkload();
+      renderAnalytics();
+      renderPipeline();
+      lucide.createIcons();
+    }
+
+    function showSection(id) {
+      els.sections.forEach(section => section.classList.toggle("active", section.id === id));
+      els.nav.forEach(button => button.classList.toggle("active", button.dataset.section === id));
+    }
+
+    function showToast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      setTimeout(() => els.toast.classList.remove("show"), 2400);
+    }
+
+    function exportCsv() {
+      const header = ["案件No", "発注者", "案件名", "落札金額税抜", "入札日", "契約日", "工期開始日", "工期終了日", "残日数", "社内担当", "主任技術者", "照査技術者", "進捗率", "ステータス", "パイプライン"];
+      const rows = projects.map(project => [project.id, project.client, project.name, project.amount, project.bidDate, project.contractDate, project.startDate, project.endDate, diffDays(project.endDate), project.salesOwner, project.leadEngineer, project.reviewEngineer, project.progress, project.status, project.pipeline]);
+      const csv = [header, ...rows].map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "construction-consultant-projects.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("CSVを書き出しました");
+    }
+
+    document.querySelectorAll("[data-section]").forEach(button => {
+      button.addEventListener("click", () => showSection(button.dataset.section));
+    });
+    document.querySelectorAll("[data-jump]").forEach(button => {
+      button.addEventListener("click", () => showSection(button.dataset.jump));
+    });
+    document.getElementById("globalSearch").addEventListener("input", event => {
+      searchTerm = event.target.value;
+      renderTables();
+    });
+    document.getElementById("statusFilter").addEventListener("change", renderTables);
+    document.getElementById("sortSelect").addEventListener("change", renderTables);
+    document.getElementById("exportCsv").addEventListener("click", exportCsv);
+    document.getElementById("openModal").addEventListener("click", () => {
+      els.modal.classList.add("active");
+      els.modal.setAttribute("aria-hidden", "false");
+    });
+    ["closeModal", "cancelModal"].forEach(id => document.getElementById(id).addEventListener("click", () => {
+      els.modal.classList.remove("active");
+      els.modal.setAttribute("aria-hidden", "true");
+    }));
+    document.getElementById("projectForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const form = new FormData(event.target);
+      const project = Object.fromEntries(form.entries());
+      project.amount = Number(project.amount);
+      project.progress = Number(project.progress);
+      projects = [project, ...projects.filter(item => item.id !== project.id)];
+      persist();
+      els.modal.classList.remove("active");
+      els.modal.setAttribute("aria-hidden", "true");
+      renderAll();
+      showToast(`${project.name} を追加しました`);
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
